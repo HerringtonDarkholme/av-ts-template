@@ -1,4 +1,4 @@
 import Vue = require('vue')
 
-var exp: Vue
+declare var exp: Vue
 export default exp

@@ -2,7 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/app.js',
+  entry: './src/app.ts',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -49,8 +49,6 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false
       }
     }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
+    new webpack.optimize.OccurenceOrderPlugin()
   ])
 }
