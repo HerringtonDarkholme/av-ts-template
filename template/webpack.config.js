@@ -10,28 +10,40 @@ module.exports = {
   },
   // resolve TypeScript and Vue file
   resolve: {
-      extensions: ['', '.ts', '.vue', '.js']
+    extensions: ['.ts', '.vue', '.js'],
+    alias: {
+      'vue$': 'vue/dist/vue.common.js' // 'vue/dist/vue.common.js' for webpack 1
+    }
   },
 
   module: {
-      loaders: [
-          { test: /\.vue$/, loader: 'vue' },
-          { test: /\.ts$/, loader: 'vue-ts' }
-      ],
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: { js: 'ts-loader', },
+          esModule: true
+        }
+      },
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+          transpileOnly: true
+        }
+      }
+    ],
   },
-  vue: {
-    // instruct vue-loader to load TypeScript
-    loaders: { js: 'vue-ts-loader', },
-    // make TS' generated code cooperate with vue-loader
-    esModule: true
+  performance: {
+    hints: false
   },
   devServer: {
-    port: 8080,
-    host: 'localhost',
     historyApiFallback: true,
-    watchOptions: { aggregateTimeout: 300, poll: 1000 }
+    noInfo: true
   },
-  devtool: '#eval-source-map'
+  devtool: '#cheap-eval-source-map',
 }
 
 
@@ -49,6 +61,5 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false
       }
     }),
-    new webpack.optimize.OccurenceOrderPlugin()
   ])
 }
